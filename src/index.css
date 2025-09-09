@@ -1,3 +1,4 @@
+/* src/index.css or your main tailwind.css file */
 @import url('https://fonts.googleapis.com/css2?family=Tagesschrift&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Outfit&display=swap');
 
@@ -28,4 +29,87 @@ a.active hr {
     background-color: lightgreen;
     color: black;
   }
+}
+
+/* --- Add your custom styles here --- */
+@layer components {
+  .cart-container {
+    @apply bg-gray-900 bg-opacity-80 backdrop-blur-sm border border-gray-700 rounded-2xl p-6 md:p-10 text-gray-200 shadow-xl;
+    animation: fadeIn 0.8s ease-in-out;
+  }
+  
+  .cart-list {
+    @apply space-y-6 md:space-y-8;
+  }
+  
+  .empty-cart {
+    @apply text-center text-gray-500 italic;
+  }
+
+  .cart-item {
+    @apply grid grid-cols-1 md:grid-cols-5 gap-4 md:gap-8 items-center p-4 rounded-xl border border-gray-800
+           bg-gray-800 bg-opacity-50 transition-all duration-300 ease-in-out;
+  }
+  
+  .cart-item:hover {
+    @apply border-cyan-400 shadow-[0_0_15px_rgba(0,255,255,0.3)] transform scale-[1.01];
+  }
+  
+  .item-image-container {
+    @apply w-full h-32 md:h-24 overflow-hidden rounded-md border border-gray-700;
+  }
+  
+  .item-image {
+    @apply w-full h-full object-cover transition-transform duration-300;
+  }
+
+  .item-details {
+    @apply col-span-1 md:col-span-2 flex flex-col;
+  }
+
+  .item-name {
+    @apply text-lg font-semibold text-gray-100 group-hover:text-cyan-400 transition-colors;
+  }
+  
+  .item-info {
+    @apply text-sm text-gray-400;
+  }
+
+  .item-price {
+    @apply text-right md:text-left text-lg font-bold font-mono text-cyan-400;
+  }
+  
+  .quantity-controls {
+    @apply flex items-center justify-end md:justify-start gap-2;
+  }
+  
+  .quantity-btn {
+    @apply w-8 h-8 flex items-center justify-center bg-gray-700 text-white rounded-full transition-colors duration-200
+           hover:bg-cyan-400 hover:text-gray-900;
+  }
+  
+  .item-quantity {
+    @apply w-8 text-center font-bold text-gray-100;
+  }
+  
+  .remove-item {
+    @apply text-red-500 hover:text-red-400 transition-colors duration-200;
+  }
+
+  .cart-summary {
+    @apply border-t border-gray-700 pt-6 mt-6 flex justify-between items-center;
+  }
+
+  .total-text {
+    @apply text-xl md:text-2xl font-bold tracking-wider;
+  }
+
+  .total-price {
+    @apply text-2xl md:text-3xl font-bold font-mono text-cyan-400;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }

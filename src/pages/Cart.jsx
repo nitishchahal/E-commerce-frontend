@@ -1,19 +1,67 @@
-import React from 'react';
+import React, { useContext, useEffect, useState, useMemo } from "react";
+import { ShopContext } from "../context/ShopContext"; 
+import Title from "../components/Title";
+import CartItem from "./CartItem"; // Assumed path
 
 const Cart = () => {
-  return (
-    <div className="max-w-4xl mx-auto p-4 sm:p-8">
-      <div className="bg-white shadow-lg rounded-2xl p-6 sm:p-10">
-        <h2 className="text-2xl font-semibold text-blue-600 mb-4">Your Cart</h2>
-        <p className="text-gray-600 mb-6">
-          Review the items in your cart before proceeding to checkout. You can update quantities or remove items.
-        </p>
+  const { cartItems, products, currency, removeFromCart, updateCartItemQuantity } = useContext(ShopContext);
+  const [cartData, setCartData] = useState([]);
 
-        <div className="border rounded-lg p-4 bg-gray-50">
-          {/* Placeholder for cart items */}
-          <p className="text-gray-500 italic">Your cart is currently empty.</p>
-        </div>
-      </div>
+  // Helper: get product details by ID (support _id or id)
+  const getProduct = (id) => products.find((p) => p.id === id || p._id === id);
+
+  useEffect(() => {
+    if (!cartItems?.length) {
+      setCartData([]);
+      return;
+    }
+
+    const tempData = cartItems.map((item) => {
+      const product = getProduct(item.id || item._id);
+      return {
+        id: product?._id || product?.id,
+        name: product?.name || "Unknown Product",
+        price: product?.price || 0,
+        image: Array.isArray(product?.image) ? product.image[0] : product?.image,
+        size: item.size,
+        quantity: item.quantity,
+      };
+    });
+
+    setCartData(tempData);
+  }, [cartItems, products]);
+
+  const totalCartPrice = useMemo(() => {
+    return cartData.reduce((total, item) => total + (item.price * item.quantity), 0);
+  }, [cartData]);
+
+  return (
+    <div className="cart-container">
+      <Title text1={"YOUR"} text2={"CART"} />
+      {cartData.length > 0 ? (
+        <>
+          <div className="cart-list">
+            {cartData.map((item, index) => (
+              <CartItem
+                key={index}
+                item={item}
+                currency={currency}
+                onRemove={() => removeFromCart(item.id, item.size)}
+                onUpdateQuantity={updateCartItemQuantity}
+              />
+            ))}
+          </div>
+          <div className="cart-summary">
+            <p className="total-text">Subtotal</p>
+            <p className="total-price">
+              {currency}
+              {totalCartPrice.toFixed(2)}
+            </p>
+          </div>
+        </>
+      ) : (
+        <p className="empty-cart">Your cart is empty.</p>
+      )}
     </div>
   );
 };

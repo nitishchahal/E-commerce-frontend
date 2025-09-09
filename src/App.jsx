@@ -1,5 +1,5 @@
-
-
+ 
+import { ToastContainer, toast } from 'react-toastify';
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import Home from "./pages/Home";
@@ -14,11 +14,14 @@ import Orders from "./pages/Orders";
 import NavBar from './components/NavBar';
 import Footer from './components/Footer';
 import SearchBar from './components/SearchBar';
+import { ShopContextProvider } from './context/ShopContext';
 
 
 const APP = () => {
   return (
      <div className='px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw] '> 
+     <ShopContextProvider>
+     <ToastContainer />
     <NavBar />
     <SearchBar/>
       <Routes>
@@ -34,6 +37,7 @@ const APP = () => {
         <Route path='*' element={<h1 className='text-3xl'>404 Not Found</h1>} />
       </Routes>
     <Footer/>
+    </ShopContextProvider>
     </div>
    
   );
