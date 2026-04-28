@@ -1,42 +1,61 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { ShopContext } from '../context/ShopContext';
-import search_icon from '../assets/search_icon.png';
-import cross_icon from '../assets/cross_icon.png';
-import { useLocation } from 'react-router-dom';
+import React, { useContext, useEffect, useState } from "react";
+import { ShopContext } from "../context/ShopContext";
+import { FiSearch, FiX } from "react-icons/fi";
+import { useLocation } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
 
 const SearchBar = () => {
-  const { search, setSearch, showSearch, setShowSearch } = useContext(ShopContext);
+  const { search, setSearch, showSearch, setShowSearch } =
+    useContext(ShopContext);
+
   const location = useLocation();
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    if (location.pathname.includes('/collection')) {
+    if (location.pathname.includes("/collection")) {
       setVisible(true);
     } else {
       setVisible(false);
     }
-  }, [location, showSearch]);
+  }, [location]);
 
-  return showSearch && visible ? (
-    <div className="border-t border-b bg-blue-50 text-center p-3 sm:p-4">
-      <div className="inline-flex items-center border border-blue-300 px-6 py-2 rounded-full bg-white shadow-sm">
-        <input
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="flex-1 px-2 bg-transparent outline-none placeholder:text-sm placeholder:text-gray-500 w-40 sm:w-60 md:w-80"
-          placeholder="Search for items..."
-        />
-        <img src={search_icon} alt="search" className="w-4 h-4 ml-2 opacity-80" />
-      </div>
-      <img
-        onClick={() => setShowSearch(false)}
-        src={cross_icon}
-        alt="close"
-        className="w-4 h-4 ml-4 inline cursor-pointer hover:scale-110 transition-transform"
-        title="Close Search"
-      />
-    </div>
-  ) : null;
+  return (
+    <AnimatePresence>
+      {showSearch && visible && (
+        <motion.div
+          initial={{ y: -60, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          exit={{ y: -60, opacity: 0 }}
+          transition={{ duration: 0.3 }}
+          className="w-full bg-white/80 backdrop-blur-xl border-b border-gray-200 shadow-sm"
+        >
+          <div className="max-w-5xl mx-auto px-4 py-3 flex items-center gap-3">
+
+            {/* 🔍 INPUT */}
+            <div className="flex items-center flex-1 bg-gray-100 rounded-full px-4 py-2 transition focus-within:bg-white focus-within:shadow-md">
+
+              <FiSearch className="text-gray-400 mr-2" />
+
+              <input
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Search for products..."
+                className="w-full bg-transparent outline-none text-sm placeholder:text-gray-400"
+              />
+            </div>
+
+            {/* ❌ CLOSE */}
+            <button
+              onClick={() => setShowSearch(false)}
+              className="p-2 rounded-full hover:bg-gray-100 transition"
+            >
+              <FiX className="text-gray-600" />
+            </button>
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
 };
 
 export default SearchBar;

@@ -1,71 +1,149 @@
-import React from 'react';
-import { FaPhone, FaEnvelope, FaMapMarkerAlt, FaFacebook, FaInstagram, FaTwitter } from 'react-icons/fa';
+import React from "react";
+import {
+  FiPhone,
+  FiMail,
+  FiMapPin,
+  FiFacebook,
+  FiInstagram,
+  FiTwitter,
+} from "react-icons/fi";
+import { motion } from "framer-motion";
+
+const contactInfo = [
+  {
+    icon: FiPhone,
+    title: "Phone",
+    value: "+91 98765 43210",
+  },
+  {
+    icon: FiMail,
+    title: "Email",
+    value: "support@yourstore.com",
+  },
+  {
+    icon: FiMapPin,
+    title: "Office",
+    value: "Indore, Madhya Pradesh, India",
+  },
+];
 
 const ContactSection = () => {
   return (
-    <div className="bg-gray-50 py-12 px-4 sm:px-8 md:px-16 text-gray-800">
-      {/* Title */}
-      <h2 className="text-4xl font-bold text-center text-blue-700 mb-12">Get in Touch With Us</h2>
+    <section className="relative py-16 px-4 md:px-10 lg:px-20 bg-gradient-to-br from-white to-gray-50 overflow-hidden">
 
-      {/* Section 1: Contact Info */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-        <div className="bg-white rounded-2xl shadow p-6">
-          <FaPhone className="text-2xl text-blue-600 mb-2" />
-          <h3 className="font-semibold text-lg mb-1">Phone</h3>
-          <p>+91 98765 43210</p>
-        </div>
+      {/* 🌫️ Glow */}
+      <div className="absolute top-[-80px] right-[-80px] w-[250px] h-[250px] bg-blue-200/30 blur-[120px] rounded-full"></div>
 
-        <div className="bg-white rounded-2xl shadow p-6">
-          <FaEnvelope className="text-2xl text-blue-600 mb-2" />
-          <h3 className="font-semibold text-lg mb-1">Email</h3>
-          <p>support@yourstore.com</p>
-        </div>
+      {/* 🧠 HEADER */}
+      <motion.div
+        initial={{ opacity: 0, y: 40 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.7 }}
+        className="text-center mb-14"
+      >
+        <p className="text-xs tracking-[0.3em] text-gray-500 mb-2">
+          CONTACT
+        </p>
+        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900">
+          Get in Touch
+        </h2>
+        <p className="text-gray-600 mt-4 max-w-xl mx-auto">
+          Have questions or need help? We’re here for you anytime.
+        </p>
+      </motion.div>
 
-        <div className="bg-white rounded-2xl shadow p-6">
-          <FaMapMarkerAlt className="text-2xl text-blue-600 mb-2" />
-          <h3 className="font-semibold text-lg mb-1">Office</h3>
-          <p>Vikramshila Parisar, Indore, Madhya Pradesh, India</p>
-        </div>
+      {/* 💎 CONTACT INFO */}
+      <div className="grid md:grid-cols-3 gap-6 mb-16">
+        {contactInfo.map((item, i) => {
+          const Icon = item.icon;
+          return (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: i * 0.1 }}
+              className="p-6 rounded-2xl bg-white/70 backdrop-blur-xl border border-gray-200 shadow-sm hover:shadow-lg transition text-center"
+            >
+              <div className="w-12 h-12 mx-auto flex items-center justify-center rounded-full bg-gray-100 mb-3">
+                <Icon className="text-gray-700" />
+              </div>
+              <h3 className="font-semibold text-gray-900">{item.title}</h3>
+              <p className="text-gray-600 mt-1 text-sm">{item.value}</p>
+            </motion.div>
+          );
+        })}
       </div>
 
-      {/* Section 2: Contact Form */}
-      <div className="bg-white rounded-2xl shadow-md p-8 mb-12">
-        <h3 className="text-2xl font-semibold mb-4 text-blue-700">Send us a Message</h3>
-        <form className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <input type="text" placeholder="Full Name" className="p-3 rounded-lg border border-gray-300 w-full" />
-          <input type="email" placeholder="Email Address" className="p-3 rounded-lg border border-gray-300 w-full" />
-          <input type="text" placeholder="Phone Number" className="p-3 rounded-lg border border-gray-300 w-full" />
-          <input type="text" placeholder="Subject" className="p-3 rounded-lg border border-gray-300 w-full" />
-          <textarea placeholder="Your Message" className="p-3 rounded-lg border border-gray-300 w-full md:col-span-2" rows="5"></textarea>
-          <button type="submit" className="md:col-span-2 bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700 transition-all">Submit</button>
+      {/* 🧾 FORM */}
+      <motion.div
+        initial={{ opacity: 0, y: 40 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        className="bg-white/70 backdrop-blur-xl border border-gray-200 rounded-2xl p-8 shadow-md mb-16"
+      >
+        <h3 className="text-xl font-semibold text-gray-900 mb-6">
+          Send a Message
+        </h3>
+
+        <form className="grid md:grid-cols-2 gap-4">
+          {["Full Name", "Email Address", "Phone Number", "Subject"].map(
+            (placeholder, i) => (
+              <input
+                key={i}
+                type="text"
+                placeholder={placeholder}
+                className="p-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-black/10 transition"
+              />
+            )
+          )}
+
+          <textarea
+            placeholder="Your Message"
+            rows="5"
+            className="p-3 rounded-lg border border-gray-200 md:col-span-2 focus:outline-none focus:ring-2 focus:ring-black/10"
+          />
+
+          <button
+            type="submit"
+            className="md:col-span-2 bg-black text-white py-3 rounded-full font-medium hover:scale-[1.02] active:scale-95 transition"
+          >
+            Send Message →
+          </button>
         </form>
-      </div>
+      </motion.div>
 
-      {/* Section 3: Google Map Embed */}
-      <div className="mb-12">
-        <h3 className="text-2xl font-semibold text-blue-700 mb-4">Our Location</h3>
-        <div className="rounded-2xl overflow-hidden shadow-md">
+      {/* 🗺 MAP */}
+      <div className="mb-16">
+        <h3 className="text-xl font-semibold text-gray-900 mb-4">
+          Our Location
+        </h3>
+
+        <div className="rounded-2xl overflow-hidden shadow-md border">
           <iframe
             title="map"
             className="w-full h-[300px] md:h-[400px]"
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3680.0633420987245!2d75.8602828753105!3d22.7252857278649!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3962fdbd2b81b4d3%3A0xeeb6a316fd4cd0ba!2sVikramshila%20Parisar%2C%20Indore%2C%20Madhya%20Pradesh%20452001!5e0!3m2!1sen!2sin!4v1699876543210!5m2!1sen!2sin"
-            allowFullScreen=""
+            src="https://www.google.com/maps?q=Indore&output=embed"
             loading="lazy"
           ></iframe>
         </div>
       </div>
 
-      {/* Section 4: Social Media & Support */}
-      <div className="bg-white rounded-2xl shadow-md p-6 text-center">
-        <h3 className="text-xl font-semibold mb-4 text-blue-700">Follow Us on Social Media</h3>
-        <div className="flex justify-center gap-6 text-blue-600 text-2xl mb-6">
-          <FaFacebook className="hover:text-blue-800 transition" />
-          <FaInstagram className="hover:text-pink-500 transition" />
-          <FaTwitter className="hover:text-sky-500 transition" />
+      {/* 🌐 SOCIAL */}
+      <div className="text-center">
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">
+          Follow Us
+        </h3>
+
+        <div className="flex justify-center gap-6 text-xl text-gray-600">
+          <FiFacebook className="hover:text-black cursor-pointer transition" />
+          <FiInstagram className="hover:text-black cursor-pointer transition" />
+          <FiTwitter className="hover:text-black cursor-pointer transition" />
         </div>
-        <p>For urgent support, contact our 24/7 helpline at <span className="font-semibold">+91 98765 43210</span>.</p>
+
+        <p className="text-gray-500 text-sm mt-4">
+          Need urgent help? Call us anytime.
+        </p>
       </div>
-    </div>
+    </section>
   );
 };
 

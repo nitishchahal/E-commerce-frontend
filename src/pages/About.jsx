@@ -1,79 +1,103 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import React from "react";
+import { motion } from "framer-motion";
+import { FiCreditCard, FiUsers, FiRefreshCw, FiTruck, FiHeadphones } from "react-icons/fi";
+
+const features = [
+  {
+    icon: FiCreditCard,
+    title: "Flexible Payments",
+    desc: "Multiple payment options including UPI, cards, net banking, and COD.",
+  },
+  {
+    icon: FiUsers,
+    title: "Trusted by Customers",
+    desc: "Maintaining a 4.9/5 rating with thousands of satisfied buyers.",
+  },
+  {
+    icon: FiRefreshCw,
+    title: "Easy Returns",
+    desc: "Simple 7-day return policy with fast and transparent refunds.",
+  },
+  {
+    icon: FiTruck,
+    title: "Fast Delivery",
+    desc: "Reliable delivery within 2–4 business days with tracking.",
+  },
+  {
+    icon: FiHeadphones,
+    title: "24/7 Support",
+    desc: "Always here to help — quick, friendly, and efficient support.",
+  },
+];
 
 const AboutSection = () => {
   return (
-    <motion.section
-      className="max-w-6xl mx-auto px-4 sm:px-6 py-12"
-      initial={{ opacity: 0, y: 40 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, ease: 'easeOut' }}
-    >
-      <div className="bg-white rounded-3xl shadow-xl p-8 sm:p-12">
-        <h2 className="text-3xl font-bold text-blue-700 mb-6 text-center">About Us</h2>
+    <section className="relative py-16 px-4 md:px-10 lg:px-20 bg-gradient-to-br from-white to-gray-50 overflow-hidden">
 
-        <p className="text-gray-600 text-lg leading-relaxed mb-4">
-          Welcome to our store! We are committed to providing top-notch products with quality service.
-          With a wide range of items curated for our customers, we strive to deliver the best shopping experience.
+      {/* 🌫️ Glow */}
+      <div className="absolute top-[-80px] left-[-80px] w-[250px] h-[250px] bg-blue-200/30 blur-[120px] rounded-full"></div>
+
+      <motion.div
+        initial={{ opacity: 0, y: 40 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.7 }}
+        viewport={{ once: true }}
+        className="max-w-5xl mx-auto text-center"
+      >
+        {/* 🧠 TITLE */}
+        <p className="text-xs tracking-[0.3em] text-gray-500 mb-2">
+          WHO WE ARE
         </p>
 
-        <p className="text-gray-600 text-lg leading-relaxed mb-4">
-          Our team works around the clock to ensure timely deliveries and prompt support. Every product is carefully checked before shipping, and our return policies are transparent and customer-friendly.
+        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900">
+          About Our Brand
+        </h2>
+
+        {/* 📝 STORY */}
+        <p className="text-gray-600 mt-6 text-base sm:text-lg leading-relaxed max-w-3xl mx-auto">
+          We’re committed to delivering premium quality products with a seamless shopping experience. 
+          Every item is carefully selected to balance style, comfort, and affordability — so you can shop with confidence.
         </p>
 
-        <div className="grid sm:grid-cols-2 gap-6 mt-8">
-          <motion.div
-            whileHover={{ scale: 1.03 }}
-            className="bg-red-100 p-6 rounded-xl shadow-sm"
-          >
-            <h3 className="text-xl font-semibold text-red-700 mb-2">Payment Methods</h3>
-            <p className="text-gray-700">
-              We accept credit cards, UPI, net banking, and COD for convenience.
-            </p>
-          </motion.div>
+        <p className="text-gray-600 mt-4 text-base sm:text-lg leading-relaxed max-w-3xl mx-auto">
+          From fast delivery to responsive customer support, we focus on every detail that makes your experience better.
+        </p>
+      </motion.div>
 
-          <motion.div
-            whileHover={{ scale: 1.03 }}
-            className="bg-blue-100 p-6 rounded-xl shadow-sm"
-          >
-            <h3 className="text-xl font-semibold text-blue-700 mb-2">Trusted Buyers</h3>
-            <p className="text-gray-700">
-              Our customers trust us — we maintain a 4.9/5 rating across platforms.
-            </p>
-          </motion.div>
+      {/* 💎 FEATURES */}
+      <div className="max-w-6xl mx-auto grid sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-16">
 
-          <motion.div
-            whileHover={{ scale: 1.03 }}
-            className="bg-yellow-100 p-6 rounded-xl shadow-sm"
-          >
-            <h3 className="text-xl font-semibold text-yellow-700 mb-2">Return Policies</h3>
-            <p className="text-gray-700">
-              Hassle-free returns within 7 days. Transparent process and quick refunds.
-            </p>
-          </motion.div>
+        {features.map((item, index) => {
+          const Icon = item.icon;
 
-          <motion.div
-            whileHover={{ scale: 1.03 }}
-            className="bg-green-100 p-6 rounded-xl shadow-sm"
-          >
-            <h3 className="text-xl font-semibold text-green-700 mb-2">Delivery Timing</h3>
-            <p className="text-gray-700">
-              We deliver most items within 2–4 business days, with tracking provided.
-            </p>
-          </motion.div>
+          return (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.1 }}
+              viewport={{ once: true }}
+              className="group p-6 rounded-2xl bg-white/70 backdrop-blur-xl border border-gray-200 shadow-sm hover:shadow-lg transition-all duration-300"
+            >
+              {/* ICON */}
+              <div className="w-12 h-12 flex items-center justify-center rounded-full bg-gray-100 group-hover:bg-black transition mb-4">
+                <Icon className="text-gray-700 group-hover:text-white transition" />
+              </div>
 
-          <motion.div
-            whileHover={{ scale: 1.03 }}
-            className="bg-purple-100 p-6 rounded-xl shadow-sm col-span-2"
-          >
-            <h3 className="text-xl font-semibold text-purple-700 mb-2">Customer Service</h3>
-            <p className="text-gray-700">
-              Our 24/7 support team is here to resolve your queries — fast, friendly, and efficient.
-            </p>
-          </motion.div>
-        </div>
+              {/* TITLE */}
+              <h3 className="text-lg font-semibold text-gray-900">
+                {item.title}
+              </h3>
+
+              {/* DESC */}
+              <p className="text-gray-600 mt-2 text-sm sm:text-base">
+                {item.desc}
+              </p>
+            </motion.div>
+          );
+        })}
       </div>
-    </motion.section>
+    </section>
   );
 };
 

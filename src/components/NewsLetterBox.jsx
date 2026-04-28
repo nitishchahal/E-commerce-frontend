@@ -1,35 +1,84 @@
-import React from 'react';
+import React, { useState } from "react";
+import { motion } from "framer-motion";
+import { FiMail } from "react-icons/fi";
 
 const NewsletterBox = () => {
+  const [email, setEmail] = useState("");
+  const [success, setSuccess] = useState(false);
+
   const onSubmitHandler = (e) => {
     e.preventDefault();
+    setSuccess(true);
+    setEmail("");
+
+    setTimeout(() => setSuccess(false), 3000);
   };
 
   return (
-    <div className="text-center py-10 bg-white">
-      <p className="text-3xl font-bold text-gray-800">Subscribe now & get 20% off</p>
-      <p className="text-gray-600 mt-3 max-w-xl mx-auto">
-        Sign up for our newsletter and stay updated on the latest arrivals, exclusive offers, and more!
-      </p>
+    <section className="relative py-16 px-4 md:px-10 lg:px-20 bg-gradient-to-br from-gray-50 to-white overflow-hidden">
 
-      <form
-        onSubmit={onSubmitHandler}
-        className="mt-6 w-full sm:w-3/5 md:w-1/2 mx-auto flex flex-col sm:flex-row gap-4 items-center justify-center"
+      {/* 🌫️ Glow */}
+      <div className="absolute top-[-80px] right-[-80px] w-[250px] h-[250px] bg-blue-200/30 blur-[120px] rounded-full"></div>
+
+      <motion.div
+        initial={{ opacity: 0, y: 40 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.7 }}
+        viewport={{ once: true }}
+        className="max-w-2xl mx-auto text-center relative z-10"
       >
-        <input
-          type="email"
-          required
-          placeholder="Enter your email"
-          className="w-full flex-1 px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-600 transition duration-200"
-        />
-        <button
-          type="submit"
-          className="px-6 py-3 bg-red-600 hover:bg-red-700 text-white text-sm font-semibold rounded-md transition duration-300"
+        {/* 🧠 TITLE */}
+        <h2 className="text-3xl sm:text-4xl font-bold text-gray-900">
+          Get 20% Off Your First Order
+        </h2>
+
+        <p className="text-gray-600 mt-4 text-sm sm:text-base">
+          Join our newsletter for exclusive drops, early access, and special offers.
+        </p>
+
+        {/* ✉️ FORM */}
+        <form
+          onSubmit={onSubmitHandler}
+          className="mt-8 flex flex-col sm:flex-row items-center gap-3 bg-white/70 backdrop-blur-xl border border-gray-200 rounded-full p-2 shadow-lg"
         >
-          SUBSCRIBE
-        </button>
-      </form>
-    </div>
+          <div className="flex items-center w-full px-3">
+            <FiMail className="text-gray-400 mr-2" />
+            <input
+              type="email"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Enter your email"
+              className="w-full bg-transparent outline-none text-sm"
+            />
+          </div>
+
+          <button
+            type="submit"
+            className="group px-6 py-2 bg-black text-white rounded-full text-sm font-medium flex items-center gap-2 shadow-md hover:scale-105 active:scale-95 transition"
+          >
+            Subscribe
+            <span className="group-hover:translate-x-1 transition">→</span>
+          </button>
+        </form>
+
+        {/* ✅ SUCCESS MESSAGE */}
+        {success && (
+          <motion.p
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-green-600 mt-4 text-sm"
+          >
+            🎉 You’re subscribed! Check your inbox.
+          </motion.p>
+        )}
+
+        {/* 🧠 TRUST NOTE */}
+        <p className="text-xs text-gray-400 mt-3">
+          No spam. Unsubscribe anytime.
+        </p>
+      </motion.div>
+    </section>
   );
 };
 

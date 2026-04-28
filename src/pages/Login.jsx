@@ -1,9 +1,137 @@
-import React from 'react'
+import React, { useState, useContext } from "react";
+import { motion } from "framer-motion";
+import { FiMail, FiLock, FiEye, FiEyeOff } from "react-icons/fi";
+import { Link, useNavigate } from "react-router-dom";
+import { ShopContext } from "../context/ShopContext";
+import { toast } from "react-toastify";
+import axios from "axios";
 
 const Login = () => {
-  return (
-    <div>Login</div>
-  )
-}
+  const [showPassword, setShowPassword] = useState(false);
+  const [formData, setFormData] = useState({
+    email: "",   // ✅ FIXED
+    password: ""
+  });
+  const [loading, setLoading] = useState(false);
 
-export default Login
+  const { login } = useContext(ShopContext);
+  const navigate = useNavigate();
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!formData.email || !formData.password) {   // ✅ FIXED
+      toast.error("Please fill all fields");
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      const res = await axios.post(
+        "http://localhost:5000/api/auth/login",
+        {
+          email: formData.email,   // ✅ FIXED
+          password: formData.password,
+        }
+      );
+
+      localStorage.setItem("token", res.data.token);
+      localStorage.setItem("user", JSON.stringify(res.data.user));
+
+      login(res.data.user);
+
+      toast.success("Welcome back 🔥");
+      navigate("/");
+
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Login failed");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <section className="min-h-screen flex items-center justify-center px-4 bg-gradient-to-br from-white to-gray-50">
+
+      <div className="absolute top-[-80px] right-[-80px] w-[250px] h-[250px] bg-blue-200/30 blur-[120px] rounded-full"></div>
+
+      <motion.div
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="relative z-10 w-full max-w-md bg-white/70 backdrop-blur-xl border border-gray-200 rounded-2xl shadow-xl p-8"
+      >
+
+        <h2 className="text-2xl font-bold text-gray-900 text-center">
+          Welcome Back
+        </h2>
+
+        <p className="text-gray-500 text-sm text-center mt-2">
+          Login to continue shopping
+        </p>
+
+        <form onSubmit={handleSubmit} className="mt-6 space-y-4">
+
+          {/* EMAIL */}
+          <div className="flex items-center border border-gray-200 rounded-lg px-3 py-2">
+            <FiMail className="text-gray-400 mr-2" />
+            <input
+              type="email"
+              name="email"   // ✅ FIXED
+              placeholder="Enter your email"
+              value={formData.email}
+              onChange={handleChange}
+              className="w-full outline-none bg-transparent text-sm"
+              required
+            />
+          </div>
+
+          {/* PASSWORD */}
+          <div className="flex items-center border border-gray-200 rounded-lg px-3 py-2">
+            <FiLock className="text-gray-400 mr-2" />
+
+            <input
+              type={showPassword ? "text" : "password"}
+              name="password"
+              placeholder="Password"
+              value={formData.password}
+              onChange={handleChange}
+              className="w-full outline-none bg-transparent text-sm"
+              required
+            />
+
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="text-gray-400"
+            >
+              {showPassword ? <FiEyeOff /> : <FiEye />}
+            </button>
+          </div>
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-black text-white py-3 rounded-full font-medium hover:scale-[1.02] active:scale-95 transition disabled:opacity-60"
+          >
+            {loading ? "Logging in..." : "Login"}
+          </button>
+        </form>
+
+        <p className="text-center text-sm text-gray-500 mt-6">
+          Don't have an account?{" "}
+          <Link to="/register" className="text-black font-medium hover:underline">
+            Sign Up
+          </Link>
+        </p>
+
+      </motion.div>
+    </section>
+  );
+};
+
+export default Login;

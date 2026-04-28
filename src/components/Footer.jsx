@@ -1,46 +1,88 @@
 import React from "react";
 import cover from "../assets/cover.png";
+import { FiInstagram, FiTwitter, FiGithub, FiMail } from "react-icons/fi";
 
 const Footer = () => {
   return (
-    <div>
-      <div className="flex flex-col sm:grid grid-cols-[3fr_1fr_1fr] gap-14 my-10 mt-40 text-sm bg-blue-50 p-8 text-gray-700">
+    <footer className="relative mt-24 bg-gradient-to-br from-white to-gray-50 border-t border-gray-200 overflow-hidden">
+
+      {/* 🌫️ Glow */}
+      <div className="absolute bottom-[-80px] left-[-80px] w-[250px] h-[250px] bg-blue-200/30 blur-[120px] rounded-full"></div>
+
+      <div className="max-w-7xl mx-auto px-6 md:px-12 py-16 grid gap-12 sm:grid-cols-2 lg:grid-cols-4 text-sm text-gray-600 relative z-10">
+
+        {/* 🧠 BRAND */}
         <div>
-          <img src={cover} alt="Logo" className="w-40 mb-5" />
-          <p className="text-gray-600 w-full md:w-2/3">
-            Welcome to our store! We’re dedicated to providing high-quality, stylish products that combine comfort and affordability. Shop confidently and elevate your everyday lifestyle.
+          <img src={cover} alt="Logo" className="w-36 mb-4" />
+          <p className="text-gray-500 leading-relaxed">
+            Elevate your everyday lifestyle with premium, comfortable, and stylish products designed for modern living.
+          </p>
+
+          {/* SOCIAL */}
+          <div className="flex gap-4 mt-6 text-lg">
+            <FiInstagram className="cursor-pointer hover:text-black transition" />
+            <FiTwitter className="cursor-pointer hover:text-black transition" />
+            <FiGithub className="cursor-pointer hover:text-black transition" />
+            <FiMail className="cursor-pointer hover:text-black transition" />
+          </div>
+        </div>
+
+        {/* 🏢 COMPANY */}
+        <div>
+          <h3 className="font-semibold text-gray-900 mb-4">Company</h3>
+          <ul className="space-y-2">
+            <li className="hover:text-black cursor-pointer transition">Home</li>
+            <li className="hover:text-black cursor-pointer transition">About Us</li>
+            <li className="hover:text-black cursor-pointer transition">Delivery</li>
+            <li className="hover:text-black cursor-pointer transition">Privacy Policy</li>
+          </ul>
+        </div>
+
+        {/* 📞 CONTACT */}
+        <div>
+          <h3 className="font-semibold text-gray-900 mb-4">Get in Touch</h3>
+          <ul className="space-y-2">
+            <li className="hover:text-black cursor-pointer transition">
+              +91 96229 64940
+            </li>
+            <li className="hover:text-black cursor-pointer transition">
+              nittysharma@gmail.com
+            </li>
+            <li className="hover:text-black cursor-pointer transition">
+              Ludhiana, Punjab
+            </li>
+          </ul>
+        </div>
+
+        {/* ✉️ MINI NEWSLETTER */}
+        <div>
+          <h3 className="font-semibold text-gray-900 mb-4">
+            Stay Updated
+          </h3>
+
+          <div className="flex items-center bg-white/70 backdrop-blur border border-gray-200 rounded-full px-3 py-2">
+            <input
+              type="email"
+              placeholder="Your email"
+              className="bg-transparent outline-none text-sm flex-1"
+            />
+            <button className="text-sm bg-black text-white px-4 py-1.5 rounded-full hover:scale-105 transition">
+              Join
+            </button>
+          </div>
+
+          <p className="text-xs text-gray-400 mt-2">
+            No spam. Unsubscribe anytime.
           </p>
         </div>
-
-        <div>
-          <p className="text-xl font-semibold mb-5 text-blue-800">COMPANY</p>
-          <ul className="flex flex-col gap-2">
-            <li className="cursor-pointer hover:text-red-600 transition">Home</li>
-            <li className="cursor-pointer hover:text-red-600 transition">About Us</li>
-            <li className="cursor-pointer hover:text-red-600 transition">Delivery</li>
-            <li className="cursor-pointer hover:text-red-600 transition">Privacy Policy</li>
-          </ul>
-        </div>
-
-        <div>
-          <p className="text-xl font-semibold mb-5 text-blue-800">GET IN TOUCH</p>
-          <ul className="flex flex-col gap-2">
-            <li className="cursor-pointer hover:text-red-600 transition">+1-962-296-4940</li>
-            <li className="cursor-pointer hover:text-red-600 transition">nittysharma@gmail.com</li>
-            <li className="cursor-pointer hover:text-red-600 transition">Ludhiana, Punjab</li>
-            <li className="cursor-pointer hover:text-red-600 transition">Terms & Conditions</li>
-          </ul>
-        </div>
       </div>
 
-      <div>
-        <hr className="border-t border-blue-200 w-full" />
-        <p className="text-center text-gray-500 text-sm py-5">
-          © 2023 JK08edits. All rights reserved. | Designed by{" "}
-          <span className="text-blue-800 font-semibold">Nitish Choudhary</span>
-        </p>
+      {/* 🔚 BOTTOM */}
+      <div className="border-t border-gray-200 text-center py-6 text-xs text-gray-500">
+        © {new Date().getFullYear()} JK08edits. All rights reserved. <br />
+        Designed by <span className="text-gray-800 font-medium">Nitish Choudhary</span>
       </div>
-    </div>
+    </footer>
   );
 };
 
