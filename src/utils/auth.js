@@ -1,16 +1,14 @@
 import { supabase } from "../lib/supabase";
 
 export async function getAuthErrorMessage(error, context = "login") {
-  const message = error?.message?.toLowerCase() || "";
+  const message = String(error?.message || "").toLowerCase();
 
   if (message.includes("email not confirmed")) {
     return "Please verify your email address before logging in.";
   }
 
   if (message.includes("invalid login credentials")) {
-    return context === "login"
-      ? "Invalid email or password. Please check your credentials."
-      : "This email may already be registered. Try logging in instead.";
+    return "Invalid email or password. If you just registered, verify your email first.";
   }
 
   if (message.includes("user already registered")) {
@@ -23,6 +21,10 @@ export async function getAuthErrorMessage(error, context = "login") {
 
   if (message.includes("rate limit")) {
     return "Too many attempts. Please wait a little and try again.";
+  }
+
+  if (message.includes("failed to fetch") || message.includes("network")) {
+    return "Unable to reach authentication service. Please check your connection and try again.";
   }
 
   return error?.message || (context === "login" ? "Login failed" : "Unable to create account");
