@@ -1,142 +1,45 @@
 import React, { createContext, useEffect, useState } from "react";
-import { products } from "../assets/assets"; // ✅ FIXED import
+import { products } from "../assets/assets";
 import { toast } from "react-toastify";
 
 export const ShopContext = createContext();
+const readStorage = (key, fallback) => { try { const value = localStorage.getItem(key); return value ? JSON.parse(value) : fallback; } catch { return fallback; } };
 
 export const ShopContextProvider = ({ children }) => {
   const [search, setSearch] = useState("");
   const [showSearch, setShowSearch] = useState(false);
   const [cartItems, setCartItems] = useState([]);
+  const [wishlistItems, setWishlistItems] = useState([]);
+  const [orders, setOrders] = useState([]);
   const [user, setUser] = useState(null);
 
-  // 🧠 LOAD USER
-  useEffect(() => {
-    try {
-      const storedUser = localStorage.getItem("user");
-      if (storedUser) setUser(JSON.parse(storedUser));
-    } catch (err) {
-      console.error("User parse error", err);
-    }
-  }, []);
+  useEffect(() => { setUser(readStorage("user", null)); setCartItems(readStorage("cart", [])); setWishlistItems(readStorage("wishlist", [])); setOrders(readStorage("orders", [])); }, []);
+  useEffect(() => localStorage.setItem("cart", JSON.stringify(cartItems)), [cartItems]);
+  useEffect(() => localStorage.setItem("wishlist", JSON.stringify(wishlistItems)), [wishlistItems]);
+  useEffect(() => localStorage.setItem("orders", JSON.stringify(orders)), [orders]);
 
-  // 🧠 LOAD CART
-  useEffect(() => {
-    try {
-      const storedCart = localStorage.getItem("cart");
-      if (storedCart) setCartItems(JSON.parse(storedCart));
-    } catch (err) {
-      console.error("Cart parse error", err);
-    }
-  }, []);
+  const login = (userData) => { setUser(userData); localStorage.setItem("user", JSON.stringify(userData)); toast.success(`Welcome back, ${userData?.name || "shopper"} 👋`); };
+  const logout = () => { setUser(null); localStorage.removeItem("user"); toast.success("Logged out successfully"); };
 
-  // 💾 SAVE CART
-  useEffect(() => {
-    localStorage.setItem("cart", JSON.stringify(cartItems));
-  }, [cartItems]);
-
-  // 🔐 LOGIN
-  const login = (userData) => {
-    setUser(userData);
-    localStorage.setItem("user", JSON.stringify(userData));
-    toast.success("Welcome back 👋");
-  };
-
-  // 🚪 LOGOUT
-  const logout = () => {
-    setUser(null);
-    setCartItems([]); // optional: clear cart
-    localStorage.removeItem("user");
-    localStorage.removeItem("cart");
-    toast.success("Logged out successfully");
-  };
-
-  // 🛒 ADD TO CART
-  const addToCart = (itemId, size) => {
-    if (!user) {
-      toast.error("Please login to add items to cart");
-      return;
-    }
-
-    if (!size) {
-      toast.error("Please select a size!");
-      return;
-    }
-
-    setCartItems((prev) => {
-      const existing = prev.find(
-        (item) => item.id === itemId && item.size === size
-      );
-
-      if (existing) {
-        return prev.map((item) =>
-          item.id === itemId && item.size === size
-            ? { ...item, quantity: item.quantity + 1 }
-            : item
-        );
-      }
-
-      return [...prev, { id: itemId, size, quantity: 1 }];
-    });
-
+  const addToCart = (itemId, size = "Standard") => {
+    if (!user) return toast.error("Please login to add items to cart");
+    setCartItems((prev) => { const existing = prev.find((item) => item.id === itemId && item.size === size); return existing ? prev.map((item) => item.id === itemId && item.size === size ? { ...item, quantity: item.quantity + 1 } : item) : [...prev, { id: itemId, size, quantity: 1 }]; });
     toast.success("Added to cart 🛒");
   };
+  const removeFromCart = (itemId, size) => { setCartItems((prev) => prev.filter((item) => !(item.id === itemId && item.size === size))); toast.success("Removed from cart"); };
+  const updateCartItemQuantity = (itemId, size, quantity) => { if (quantity <= 0) return removeFromCart(itemId, size); setCartItems((prev) => prev.map((item) => item.id === itemId && item.size === size ? { ...item, quantity } : item)); };
+  const getCartCount = () => cartItems.reduce((total, item) => total + item.quantity, 0);
 
-  // ❌ REMOVE ITEM
-  const removeFromCart = (itemId, size) => {
-    setCartItems((prev) =>
-      prev.filter((item) => !(item.id === itemId && item.size === size))
-    );
-    toast.success("Removed from cart");
+  const toggleWishlist = (itemId) => {
+    if (!user) return toast.error("Please login to save favourites");
+    setWishlistItems((prev) => { const exists = prev.includes(itemId); toast.success(exists ? "Removed from wishlist" : "Saved to wishlist ❤️"); return exists ? prev.filter((id) => id !== itemId) : [...prev, itemId]; });
   };
 
-  // 🔄 UPDATE QUANTITY
-  const updateCartItemQuantity = (itemId, size, quantity) => {
-    if (quantity <= 0) {
-      removeFromCart(itemId, size);
-      return;
-    }
-
-    setCartItems((prev) =>
-      prev.map((item) =>
-        item.id === itemId && item.size === size
-          ? { ...item, quantity }
-          : item
-      )
-    );
+  const placeOrder = (orderData = {}) => {
+    if (!cartItems.length) return toast.error("Your cart is empty");
+    const order = { id: `ORD-${Date.now().toString().slice(-8)}`, items: cartItems, status: "Confirmed", createdAt: new Date().toISOString(), ...orderData };
+    setOrders((prev) => [order, ...prev]); setCartItems([]); toast.success("Order placed successfully 🎉"); return order;
   };
 
-  // 🔢 CART COUNT
-  const getCartCount = () =>
-    cartItems.reduce((total, item) => total + item.quantity, 0);
-
-  const value = {
-    products,
-    currency: "₹",
-    deliveryCharges: 50,
-
-    // search
-    search,
-    setSearch,
-    showSearch,
-    setShowSearch,
-
-    // cart
-    cartItems,
-    addToCart,
-    removeFromCart,
-    updateCartItemQuantity,
-    getCartCount,
-
-    // auth
-    user,
-    login,
-    logout,
-  };
-
-  return (
-    <ShopContext.Provider value={value}>
-      {children}
-    </ShopContext.Provider>
-  );
+  return <ShopContext.Provider value={{ products, currency: "₹", deliveryCharges: 50, search, setSearch, showSearch, setShowSearch, cartItems, addToCart, removeFromCart, updateCartItemQuantity, getCartCount, wishlistItems, toggleWishlist, orders, placeOrder, user, login, logout }}>{children}</ShopContext.Provider>;
 };
