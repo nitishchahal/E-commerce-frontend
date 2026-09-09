@@ -14,7 +14,7 @@ import Register from "./pages/Register";
 import Profile from "./pages/Profile";
 import Wishlist from "./pages/Wishlist";
 import ForgotPassword from "./pages/ForgotPassword";
-import ResetPassword from "./pages/ResetPassword";
+import ResetPassword from "./pages/ResetPassword";\nimport Addresses from "./pages/Addresses";
 import NavBar from "./components/NavBar";
 import Footer from "./components/Footer";
 import SearchBar from "./components/SearchBar";
@@ -66,7 +66,7 @@ const APP = () => {
           <Route path="/wishlist" element={<ProtectedRoute><Wishlist /></ProtectedRoute>} />
           <Route path="/placeorder" element={<ProtectedRoute><PlaceOrder /></ProtectedRoute>} />
           <Route path="/orders" element={<ProtectedRoute><Orders /></ProtectedRoute>} />
-          <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+          <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />\n          <Route path="/addresses" element={<ProtectedRoute><Addresses /></ProtectedRoute>} />
 
           <Route
             path="*"
