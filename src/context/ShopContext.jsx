@@ -195,31 +195,65 @@ export const ShopContextProvider = ({ children }) => {
   }, [loadAddresses, loadCart, loadOrders, loadProfile, loadWishlist]);
 
   useEffect(() => {
-    loadProducts();
+    let mounted = true;
 
-    supabase.auth.getUser().then(({ data }) => {
-      setUser(mapSupabaseUser(data.user));
-      setAuthLoading(false);
-      if (data.user) loadCustomerData(data.user.id);
-    });
+    const clearCustomerState = () => {
+      setProfile(null);
+      setCartItems([]);
+      setWishlistItems([]);
+      setAddresses([]);
+      setOrders([]);
+      setCustomerLoading(false);
+    };
+
+    const initializeAuth = async () => {
+      try {
+        // getSession reads the persisted browser session first and does not depend on
+        // a successful remote getUser() request to let the UI render.
+        const { data, error } = await supabase.auth.getSession();
+        if (error) throw error;
+        if (!mounted) return;
+
+        const authUser = data.session?.user || null;
+        setUser(mapSupabaseUser(authUser));
+
+        if (authUser) {
+          void loadCustomerData(authUser.id);
+        } else {
+          clearCustomerState();
+        }
+      } catch (error) {
+        console.error("Unable to restore authentication session", error);
+        if (mounted) {
+          setUser(null);
+          clearCustomerState();
+        }
+      } finally {
+        if (mounted) setAuthLoading(false);
+      }
+    };
+
+    void loadProducts();
+    void initializeAuth();
 
     const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (!mounted) return;
+
       const nextUser = mapSupabaseUser(session?.user || null);
       setUser(nextUser);
       setAuthLoading(false);
 
       if (nextUser) {
-        loadCustomerData(nextUser.id);
+        void loadCustomerData(nextUser.id);
       } else {
-        setProfile(null);
-        setCartItems([]);
-        setWishlistItems([]);
-        setAddresses([]);
-        setOrders([]);
+        clearCustomerState();
       }
     });
 
-    return () => listener.subscription.unsubscribe();
+    return () => {
+      mounted = false;
+      listener.subscription.unsubscribe();
+    };
   }, [loadCustomerData, loadProducts]);
 
   const login = (authUser) => {
