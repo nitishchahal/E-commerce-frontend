@@ -4,6 +4,7 @@ import { FiMail, FiLock, FiUser } from "react-icons/fi";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { supabase } from "../lib/supabase";
+import { getAuthErrorMessage } from "../utils/auth";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -39,6 +40,7 @@ const Register = () => {
         email,
         password,
         options: {
+          emailRedirectTo: window.location.origin,
           data: {
             first_name: firstName,
             last_name: lastName,
@@ -49,15 +51,25 @@ const Register = () => {
 
       if (error) throw error;
 
+      // Hosted Supabase projects commonly require email confirmation before
+      // password login. Treat a null session as a successful signup that needs
+      // email verification instead of incorrectly attempting a login.
+      if (data.user && !data.session) {
+        toast.success("Account created! Please verify your email before logging in.");
+        navigate("/login");
+        return;
+      }
+
       if (data.session) {
         toast.success("Account created 🎉");
         navigate("/");
-      } else {
-        toast.success("Account created! Check your email to verify your account.");
-        navigate("/login");
+        return;
       }
+
+      toast.success("Account created. Please check your email to continue.");
+      navigate("/login");
     } catch (error) {
-      toast.error(error?.message || "Unable to create account");
+      toast.error(await getAuthErrorMessage(error, "register"));
     } finally {
       setLoading(false);
     }
@@ -71,9 +83,7 @@ const Register = () => {
         className="w-full max-w-md bg-white/70 backdrop-blur-xl border border-gray-200 rounded-2xl shadow-xl p-8"
       >
         <h2 className="text-2xl font-bold text-center mb-2">Create Account</h2>
-        <p className="text-center text-sm text-gray-500 mb-6">
-          Start your shopping journey
-        </p>
+        <p className="text-center text-sm text-gray-500 mb-6">Start your shopping journey</p>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="flex gap-2">
