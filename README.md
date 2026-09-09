@@ -1,12 +1,38 @@
-# React + Vite
+# E-Commerce Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern, responsive e-commerce frontend built with React and Vite.
 
-Currently, two official plugins are available:
+## Features
+- Product browsing, search and filtering
+- Product detail pages
+- Shopping cart with quantity management
+- Cart persistence with Local Storage
+- Wishlist / favourites
+- Client-side authentication flow
+- Protected checkout, orders and profile routes
+- Local order persistence
+- Toast notifications
+- Responsive UI and animations
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Tech Stack
+React 19 · Vite · React Router · Tailwind CSS · Context API · Local Storage · Framer Motion · React Icons · React Toastify · Axios
 
-## Expanding the ESLint configuration
+## Run Locally
+```bash
+git clone https://github.com/nitishchahal/E-commerce-frontend.git
+cd E-commerce-frontend
+npm install
+npm run dev
+```
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Future Improvements
+- Backend API and database
+- Secure authentication
+- Payment gateway
+- Admin dashboard
+- Product reviews and inventory management
+
+## Author
+**Nitish Choudhary**
+
+Portfolio project demonstrating modern frontend development skills.
