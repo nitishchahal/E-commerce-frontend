@@ -1,4 +1,4 @@
-import React, { useContext, useMemo, useState } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import { ShopContext } from "../context/ShopContext";
 import { assets } from "../assets/assets";
 import { motion } from "framer-motion";
@@ -15,7 +15,7 @@ const PlaceOrder = () => {
   const [paymentMethod, setPaymentMethod] = useState("cod");
   const [selectedAddressId, setSelectedAddressId] = useState(addresses.find((a) => a.is_default)?.id || addresses[0]?.id || null);
   const [showNewAddress, setShowNewAddress] = useState(!addresses.length);
-  const [form, setForm] = useState(emptyAddress);
+  const [form, setForm] = useState(emptyAddress);\n\n  useEffect(() => {\n    if (!selectedAddressId && addresses.length) {\n      setSelectedAddressId(addresses.find((a) => a.is_default)?.id || addresses[0].id);\n      setShowNewAddress(false);\n    }\n  }, [addresses, selectedAddressId]);
 
   const cartData = useMemo(() => cartItems.map((item) => {
     const product = products.find((p) => String(p._id || p.legacy_id) === String(item.id));
