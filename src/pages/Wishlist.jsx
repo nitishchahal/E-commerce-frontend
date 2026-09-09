@@ -1,0 +1,11 @@
+import React, { useContext } from "react";
+import { Link } from "react-router-dom";
+import { FaHeart, FaShoppingBag } from "react-icons/fa";
+import { ShopContext } from "../context/ShopContext";
+const Wishlist = () => {
+  const { products, wishlistItems, toggleWishlist, addToCart, currency } = useContext(ShopContext);
+  const items = products.filter((product) => wishlistItems.includes(product._id || product.id));
+  if (!items.length) return <div className="min-h-[60vh] flex flex-col items-center justify-center text-center gap-4"><div className="w-20 h-20 rounded-full bg-rose-50 flex items-center justify-center text-rose-500 text-3xl"><FaHeart /></div><h1 className="text-2xl font-semibold">Your wishlist is empty</h1><p className="text-gray-500">Save products you love and find them here later.</p><Link to="/collection" className="bg-black text-white px-6 py-3 rounded-full">Explore products</Link></div>;
+  return <section className="py-12"><div className="flex items-end justify-between mb-8"><div><p className="text-sm text-gray-500">SAVED FOR LATER</p><h1 className="text-3xl font-semibold">My Wishlist</h1></div><span className="text-gray-500">{items.length} saved</span></div><div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">{items.map((item) => { const id=item._id||item.id; const image=Array.isArray(item.image)?item.image[0]:item.image; return <article key={id} className="group border border-gray-100 rounded-2xl overflow-hidden bg-white shadow-sm hover:shadow-xl transition-shadow"><Link to={`/product/${id}`} className="block aspect-[4/5] bg-gray-50 overflow-hidden"><img src={image} alt={item.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" /></Link><div className="p-4"><h2 className="font-medium truncate">{item.name}</h2><p className="font-semibold mt-2">{currency}{item.price}</p><div className="flex gap-2 mt-4"><button onClick={() => addToCart(id, item.sizes?.[0] || "Standard")} className="flex-1 bg-black text-white rounded-lg py-2.5 text-sm flex items-center justify-center gap-2"><FaShoppingBag /> Add</button><button onClick={() => toggleWishlist(id)} className="w-11 border rounded-lg text-rose-500" aria-label="Remove from wishlist"><FaHeart /></button></div></div></article>; })}</div></section>;
+};
+export default Wishlist;
