@@ -87,22 +87,4 @@ create policy wishlist_manage_own on public.wishlist_items
   using ((select auth.uid()) = user_id)
   with check ((select auth.uid()) = user_id);
 
--- Orders are read-only to customers. The SECURITY DEFINER checkout function
--- validates auth.uid(), selected address ownership, and calculates prices from products.
-create or replace function public.checkout_cart(
-  p_address_id bigint,
-  p_payment_method text default 'cod'
-)
-returns jsonb
-language plpgsql
-security definer
-set search_path = public
-as $$
--- See docs/ECOMMERCE_WORKFLOW.md and applied Supabase migration for implementation details.
-begin
-  raise exception 'Use the deployed migration implementation for checkout_cart';
-end;
-$$;
-
--- In production, use the complete migration applied through Supabase rather than
--- replaying this repository snapshot over an existing database.
+-- Orders are read-only to customers. The deployed Supabase migration includes a SECURITY DEFINER checkout_cart RPC that validates auth.uid(), address ownership, and calculates prices from products server-side.\n-- This repository snapshot documents the schema; do not replace the deployed checkout RPC with a stub.\n
